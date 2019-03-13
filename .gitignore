@@ -1,4 +1,10 @@
+# R Stuff
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+
+# Folders
+
+# Miscellaneous
+.DS_Store
