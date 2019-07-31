@@ -1,0 +1,101 @@
+\documentclass[12pt]{article}
+\usepackage{euscript,,amssymb,amsmath,amsthm,times,graphicx,amstext,setspace,enumerate,picinpar,titlesec,hyperref}
+\usepackage{color}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\setlength{\textwidth}{6.5in} \setlength{\oddsidemargin}{0in}
+\setlength{\topmargin}{0in} \setlength{\headheight}{0in}
+\setlength{\headsep}{0in}\setlength{\textheight}{9.1in}\setlength{\footskip}{.25in}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corallary}{Corallary}
+\newtheorem*{defn}{Def$^{\text{n}}$}
+
+\title{Error Scale Modeling Using Mouse-tracking and Biometric Measures}
+\author{Roger Bailey, Jeff Dotson, and ??}
+\setstretch{1}
+\begin{document}
+ \maketitle \normalsize
+
+
+\section{General Idea}
+When respondents engage in discrete choice experiments, they are typically assumed to carefully evaluate the alternatives within each choice task.  This ``engagement'' in the choice tasks is important for the purposes of modeling choice, as the level of engagement affects the scale of the error term.  Naturally, respondents may differ in their level of engagement in the choice tasks.  Differences in engagement across respondents can be handled by heterogeneity provided that engagement is constant across tasks for each respondent, but if the level of engagement changes across tasks than respondent-level heterogeneity is not sufficient.   As error scale is fixed across tasks in the standard model, tasks with high engagement and low engagement are treated equally. This project seeks to directly model changes in the error scale due to changes in engagement across choice tasks. The hope is that by allowing for an increased error scale for tasks with low engagement, the tasks with high engagement can be made to be more informative in the model, improving model fit and predictive results.  \\
+
+\section{Challenges}
+The primary challenge in this project is to develop a good measure of engagement.  Assuming that respondents learn more about their preferences and the structure of the tasks during the experiment, any measure of engagement across tasks could potentially be confounded with learning.  To address this concern, the nature of the choice experiment must be changed to prevent learning.  Given an adequately structured experiment, we believe that changes in mouse behavior and other data can serve as a proxy measures for changes in engagement.  If preliminary results show this belief to be well-founded, the implications could be great, as mouse tracking information is easy to collect.\\
+
+Another challenge is that any tracking measures will also be affected by the content in the task.  For example, tasks with ``easy'' choices may have different tracking data than more difficult task, regardless of engagement.  I picture this as a time series of each tracking measure, with observations being random draws about a general trend in the measure.  I believe that this trend must be modeled somehow for this to work.\\
+
+\noindent Remaining Work/Questions:
+\begin{itemize}
+\item Are changes in task structure sufficient to prevent learning.  As I see it, learning can occur in two ways.  First, respondents can ``learn'' by becoming more efficient at the task.  Second, they can ``learn'' about their preferences for the alternatives.  Both of these may affect mouse tracking and other biometric measures.  By changing the structure of the task, I believe we can prevent the first type of learning.  It is the second type that may be problematic.  My belief/hope is that the second type of learning occurs rather quickly, and does not have lasting effects on the tracking data in latter tasks.
+\item How do we incorporate this information into the model?
+\begin{itemize}
+\item[-] Data could be summarized at the respondent level as trends in the changes of tracking measures across the tasks.  This information could then be used in a non-dynamic model as a proxy for engagement, with error scale being a function of this data in the upper level.  
+\begin{itemize}
+\item[+] In this case, task-level error scale would be the output of a specified functional form requiring a model of the general shape of the change in the error scale.  For example, a linear change in error scale across tasks.
+\end{itemize}
+\item[-] Data could be summarized at the respondent-task level. I think there are many ways this data could be used, but it does increase complexity.
+\begin{itemize} 
+\item[+] The error scale at each task could be a function of the task-specific tracking measures.  Note that while this is the more general model, the difficulty is that there may not be enough task-to-task consistency in the tracking measures to adequately inform the model.  This is the results of this setup not including a model of the trend in tracking measures (engagement proxy variables),   Potential remedies include the use of rolling averages in place of task-specific measures and/or the use of very tight priors to strengthen shrinkage.
+\item[+] A more direct model could really upon the latent engagement variable.  In this setup we start with a model of respondent engagement across tasks.  For example, a linear change in engagement across tasks.  This model leads to the model and likelihood of the observed tracking data, as well as the model of error scale.  I have not spent much time on this, but I need to think about how the model can work with multiple likelihoods (the likelihood of the tracking observations given the engagement variable, and likelihood of the choice data given the parameters of the choice model).
+\end{itemize}
+\end{itemize}
+
+
+
+\end{itemize}
+
+
+\section{Simple Model}
+
+The simplest model is one wherein the observed tracking variables are used as proxy variables for engagement, and these variables are summarized to the respondent level.  Here the tracking measures are simply covariates in the upper level, and error scale is assumed to change at a rate determined by a particular form (linear).\\
+
+\subsection{Choice Model}
+\noindent The choice by respondent $h$ in choice task $i$, denoted $y_{hi}$, is given by
+
+$$y_{hi}=\max\{X_{ji}\left(\beta_{h}*\alpha_{hi}\right) + \epsilon_{hi}\}$$
+
+\noindent where $X_{i}$ is a matrix of the attributes of the alternatives in choice task $i$, $\beta_h$ is the vector of part-worth utilities for respondent $h$, $\epsilon_{hi}$ is the vector of error terms for respondent $h$ in choice task $i$, and $\alpha_{hi}$ is the scaling multiplier for task $i$.  Here $\alpha_{hi}=\frac{1}{\sigma_{hi}}$ with $\sigma_{hi}$ being the error scale.\\
+
+\noindent The scaling multiplier $\alpha_{hi}$ is given by:
+
+$$\alpha_{hi}=1+\gamma_h*i$$
+
+\noindent where $\gamma_h$ is the slope of the change in the error scale across tasks.\\
+
+\subsection{Upper Level}
+
+The heterogeneous part-worth utilities are given by
+
+$$\beta_h \sim N(\Delta z_h,V_\beta)$$
+
+\noindent where $z_h$ is a vector of covariates for respondent $h$, and $\Delta$ converts these covariates into part worth utility.  Similarly, the slope of the linear change in the scaling multiplier is given by
+
+$$\gamma_h \sim N(\Omega z_h,V_\gamma).$$
+
+\noindent where $\Omega$ converts the covariates into a slope. \\\bigskip
+
+\textbf{NOTE:} This structure can be adjusted in a few ways.  The above requires obvious constraints on the value of $\gamma_h$ so that $\alpha$ does not become negative, this could be done in a few ways.  The covariates could also be separated so that the slope of the error scale is only a function of the tracking variables.
+
+\section{Simple Integrated Model of Engagement}
+
+The integrated model is one wherein both the error scale and the tracking variables are modeled as functions of engagement. In this case, we assume a specific structure for the individual engagement (linearly decreasing over tasks) and assume that error and tracking variables are a linear function of the inverse of engagement. \\
+
+\subsection{Choice Model}
+\noindent The choice by respondent $h$ in choice task $i$, denoted $y_{hi}$, is given by
+
+$$y_{hi}=\max\{X_{ji}\left(\frac{\beta_{h}}{\sigma_{hi}}\right) + \epsilon_{hi}\}$$
+
+\noindent where $X_{i}$ is a matrix of the attributes of the alternatives in choice task $i$, $\beta_h$ is the vector of part-worth utilities for respondent $h$, $\epsilon_{hi}$ is the vector of error terms for respondent $h$ in choice task $i$, and $\sigma$ is the error scale.  Here $\sigma_{hi}=1+ \frac{i}{\alpha_{h}}$ with $\alpha_{h}$ being a measure of engagement (i.e. the ``slope'' of engagement).\\
+
+\noindent The tracking variables $z_{hij}$, where $j$ indexes the tracking measure, are then given by:
+
+$$z_{hij}=\gamma_{hj} + \left(\frac{i}{\alpha_{h}}\right)*\lambda_{hj}$$
+
+\noindent where $\gamma_{hj}$ is the intercept and $\lambda$ is the slope of the change in the tracking variables across tasks.\\
+
+\textbf{Note that the sampler of this model will require the draw of  $\alpha$ which will have likelihood that contains both choices $y$ and tracking variables $z$.  I have an idea on the setup, but I'm not sure its OK.}
+
+
+\end{document}
