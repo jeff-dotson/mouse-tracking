@@ -1,3 +1,8 @@
+
+---
+title: "Dynamically Assessing Respondent Quality in Conjoint Studies"
+output: github_document
+---
 Dynamically Assessing Respondent Quality in Conjoint Studies
 ================
 
@@ -15,7 +20,7 @@ conflict, and affect.We show through a series of experiments that mouse
 tracking can be used to assess respondent engagement.
 
 ### Keywords
-mouse tracking, conjoint analysis, error scale modeling, Hierarchical Multinomial Logit
+mouse tracking, conjoint analysis, error scale modeling, Hierarchical Multinomial Logit 
 
 ### Disciplines
 Behavioral Economics, Business, Marketing, Statistics 
@@ -30,10 +35,19 @@ The potential applications of this in conjoint include being able to determine e
 
 ## Empirical Methods and Models
 
-In the Generalized Hierarchical MNL framework, the utility of respondent *i* for alternative *j* whithin choice c is the same as the standard Hierarchical Bayes model: 
+In the Generalized Hierarchical Multinomial Logit (MNL) framework, the utility of respondent *i* for alternative *j* whithin choice c is the same as the standard Hierarchical Bayes model: 
 $U_{ijc} = {X^\prime_{ijc}\beta_{i} + \epsilon_{ijc}}$ 
 
-with $\epsilon_{ijc}$ distributed IID Gumbel.  We know that $\beta_{i}$ cannot be separately identified from the scale parameter of the errors ($\lambda$), so this is typically fixed to 1.
+with $\epsilon_{ijc}$ distributed independent and identically distributed random variables (IID) in a Gumbel distribution.  We know that $\beta_{i}$ cannot be separately identified from the scale parameter of the errors ($\lambda$), so this is typically fixed to 1.
+
+If we allow a Heterogenous Error scale, the generalized MNL model specifies a joint distribution for $\beta_{i}$ and $\lambda_{i}$, where $\beta_{i} \sim \mathcal{N}(\Delta^\prime{z_{i}}, V_{\beta})$ and $\log(\lambda_{i}) \sim \mathcal{N}(\delta^\prime{z_{i}}, \sigma^2)$.
+
+**Not sure here what this is,find out what it is and introduce\expound on it**
+Identification is acheived centering the covariates $(z_{i})$ across respondents. 
+
+This model can be extended to incorporate task-level tracking data into the error term. This is done by a deterministic deviation in the error scale in task level differences,  
+$\log(\lambda_{ic}) = \omega^{\prime}tr_{ic} + \delta^{\prime}z_{i} + \xi_{i}$. In this instance, identification is achieved by centering the task-level tracking variables, $tr_{ic}$ across tasks for each individual.
+
 
 ## Interpretation of results
 
