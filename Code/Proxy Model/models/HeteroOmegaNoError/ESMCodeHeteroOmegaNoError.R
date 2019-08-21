@@ -15,9 +15,8 @@ setwd("/Users/rogerbailey/Dropbox/Models/HeteroOmegaNoError")
 #Use 1 for simulated data, 0 for Realdata.RData
 sim=0
 
-
 if(sim==1){
-  set.seed{22)
+  set.seed(22)
   nresp=500# number of respondents
   nalt=4# number of alternatives per task (inc outside)
   natt=3#number of discretely-leveled attributes (inc dummied price)
@@ -164,3 +163,4 @@ View(output$Vlambdadraw)
 
   
 }
+
