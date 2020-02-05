@@ -12,11 +12,11 @@ library(gdata)
 
 setwd("/Users/rogerbailey/Dropbox/Models/HeteroOmegaNoError")
 
-#Use simulated data
-sim=1
+#Use 1 for simulated data, 0 for Realdata.RData
+sim=0
 
 if(sim==1){
-  set.seed{22)
+  set.seed(22)
   nresp=500# number of respondents
   nalt=4# number of alternatives per task (inc outside)
   natt=3#number of discretely-leveled attributes (inc dummied price)
@@ -24,6 +24,8 @@ if(sim==1){
   ntask=50#number of choice tasks
   ndesn=100#number of different designs
   nbeta=natt*nlvl+1
+  
+  # here this stuff
   nZ=1#number of upper level covariates(including unity)
   nTr=3#number of tracking variables
 
@@ -161,3 +163,4 @@ View(output$Vlambdadraw)
 
   
 }
+
